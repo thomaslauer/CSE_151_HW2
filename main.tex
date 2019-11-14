@@ -12,6 +12,8 @@
 \item We have a data set $(x^{(1)}, y^{(1)}), \ldots, (x^{(n)}, y^{(n)})$, where $x^{(i)} \in \R^d$ and $y^{(i)} \in \R$. We want to express $y$ as a linear function of $x$, but the error penalty we have in mind is not the usual squared loss: if we predict $\widehat{y}$ and the true value is $y$, then the penalty should be the absolute difference, $|y - \widehat{y}|$. Write down the loss function that corresponds to the total penalty on the training set.
 \begin{solution}
 
+  $L(w) = \sum_{i=1}^{d}{\lvert y^{(i)}-w \cdot x^{(i)} \rvert}$
+
 \end{solution}
 
 \item Consider the following loss function on vectors $w \in \R^4$:
@@ -25,11 +27,24 @@ $$ L(w) = w_1^2 + 2 w_2^2 + w_3^2 - 2w_3w_4 + w_4^2 + 2w_1 - 4w_2 + 4 .$$
 \begin{solution}
   \begin{enumerate}
     \item 
-      % TODO
+    $\nabla L(w) = \begin{pmatrix} 
+      2w_1 + 2 \\ 
+      4w_2 - 4 \\
+      2w_3 - 2w_4 \\
+      2w_4-2w_3
+    \end{pmatrix}$
+    \item
+    $\begin{pmatrix} 
+      2\eta \\ 
+      -4\eta \\
+      0 \\
+      0
+    \end{pmatrix}$
+
     \item 
-      % TODO
+      1
     \item 
-      % TODO
+      No, the function is minimized anywhere $w_1 = -1$, $w_2 = 1$, and $w_3 = w_4$
   \end{enumerate}
 \end{solution}
 
@@ -53,19 +68,19 @@ $$ L(w) = w_1^2 + 2 w_2^2 + w_3^2 - 2w_3w_4 + w_4^2 + 2w_1 - 4w_2 + 4 .$$
   \begin{enumerate}
     \item[(a)]
       % TODO uncomment one
-      % convex
+      convex
       % concave
       % both
       % neither
     \item[(b)]
       % TODO uncomment one
       % convex
-      % concave
+      concave
       % both
       % neither
     \item[(c)]
       % TODO uncomment one
-      % convex
+      convex
       % concave
       % both
       % neither
@@ -73,24 +88,24 @@ $$ L(w) = w_1^2 + 2 w_2^2 + w_3^2 - 2w_3w_4 + w_4^2 + 2w_1 - 4w_2 + 4 .$$
       % TODO uncomment one
       % convex
       % concave
-      % both
+      both
       % neither
     \item[(e)]
       % TODO uncomment one
       % convex
       % concave
       % both
-      % neither
+      neither
     \item[(f)]
       % TODO uncomment one
-      % convex
+      convex
       % concave
       % both
       % neither
     \item[(g)]
       % TODO uncomment one
       % convex
-      % concave
+      concave
       % both
       % neither
   \end{enumerate}
@@ -99,10 +114,42 @@ $$ L(w) = w_1^2 + 2 w_2^2 + w_3^2 - 2w_3w_4 + w_4^2 + 2w_1 - 4w_2 + 4 .$$
 \item Show that the matrix $M = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$ is not positive semidefinite.
 \begin{solution}
 
+  For $M$ to be positive semidefinite, $z^TMz \geq 0$ for all $z \in \R^2$
+
+  $
+  \begin{pmatrix}
+    a & b
+  \end{pmatrix}
+  \begin{pmatrix}
+    0 & 1 \\ 1 & 0
+  \end{pmatrix}
+  \begin{pmatrix}
+    a \\ b
+  \end{pmatrix}
+  = ab + ab
+  $
+
+  When $a=1$, $b=-1$, this expression is $-2$, and therefore this matrix is not positive semidefinite.
+
 \end{solution}
 
 \item Show that the matrix $M = \begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix}$ is positive semidefinite.
 \begin{solution}
+
+  $
+  \begin{pmatrix}
+    a & b
+  \end{pmatrix}
+  \begin{pmatrix}
+    1 & -1 \\ -1 & 1
+  \end{pmatrix}
+  \begin{pmatrix}
+    a \\ b
+  \end{pmatrix}
+  = a^2-2ab+b^2=(a-b)^2
+  $
+
+  Because of this squaring, there is no $z$ in $\R^2$ that can make $z^TMz$ less than 0. $M$ is positive semidefinite.
 
 \end{solution}
 
@@ -110,7 +157,23 @@ $$ L(w) = w_1^2 + 2 w_2^2 + w_3^2 - 2w_3w_4 + w_4^2 + 2w_1 - 4w_2 + 4 .$$
 $$ L(z) = \sum_{i=1}^n \|x^{(i)} - z \|^2 .$$
 Use calculus to determine $z$, in terms of the $x^{(i)}$.
 \begin{solution}
+  Simplify the loss function:
+  \begin{align*}
+    L(w) &= \sum_{i=1}^d{\left(\sqrt{\left(x^{(i)}-z\right)^2}\right)^2} \\
+    &= \sum_{i=1}^d{\left(x^{(i)}-z\right)^2}
+  \end{align*}
 
+  Take derivative with respect to $z$:
+
+
+  \begin{align*}
+    \frac{\delta}{\delta z} L(w) &= \frac{\delta}{\delta z} \sum_{i=1}^d{\left(x^{(i)}-z\right)^2} \\
+    &= \sum_{i=1}^d{ \frac{\delta}{\delta z} \left(x^{(i)}-z\right)^2} \\
+    &= \sum_{i=1}^d{\left(-2x^{(i)}+2z\right)} \\
+    0 &= 2zd + \sum_{i=1}^d{-2x^{(i)}} \\
+    \sum_{i=1}^d{2x^{(i)}} &= 2zd \\
+    \frac{\sum_{i=1}^d{x^{(i)}}}{d} &= z \\
+  \end{align*}
 \end{solution}
 
 \item Consider the loss function for ridge regression (ignoring the intercept term):
